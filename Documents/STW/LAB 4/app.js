@@ -187,6 +187,24 @@ app.patch("/api/canciones/:id", (req, res) => {
   }
 });
 
+// DELETE /api/canciones/:id: Eliminar canción
+app.delete("/api/canciones/:id", (req, res) => {
+  try {
+    const index = canciones.findIndex((c) => c.id === req.params.id);
+
+    if (index === -1) {
+      return res.status(404).json({ ok: false, error: "Canción no encontrada" });
+    }
+
+    const cancionEliminada = canciones[index];
+    canciones.splice(index, 1);
+
+    res.status(200).json({ ok: true, data: cancionEliminada });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: "Error interno del servidor" });
+  }
+});
+
 // Iniciar servidor
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);

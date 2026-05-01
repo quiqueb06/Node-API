@@ -51,6 +51,25 @@ let canciones = [
   },
 ];
 
+// GET /api/canciones: Lista de canciones
+app.get("/api/canciones", (req, res) => {
+  try {
+    const { genero } = req.query;
+
+    // Filtrar por género si existe
+    if (genero) {
+      const resultado = canciones.filter(
+        (c) => c.genero.toLowerCase() === genero.toLowerCase()
+      );
+      return res.status(200).json({ ok: true, data: resultado });
+    }
+
+    res.status(200).json({ ok: true, data: canciones });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: "Error interno del servidor" });
+  }
+});
+
 // Iniciar servidor
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);

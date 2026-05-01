@@ -205,6 +205,16 @@ app.delete("/api/canciones/:id", (req, res) => {
   }
 });
 
+// Manejo de rutas no definidas (404)
+app.use((req, res) => {
+  res.status(404).json({
+    error: "Ruta no encontrada",
+    ruta: req.originalUrl,
+    metodo: req.method,
+    sugerencia: "Visita / para ver los endpoints disponibles",
+  });
+});
+
 // Iniciar servidor
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);

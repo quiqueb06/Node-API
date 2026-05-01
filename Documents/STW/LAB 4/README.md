@@ -16,7 +16,7 @@ npm install
 ## Uso
 
 ```bash
-node app.js
+npm start
 ```
 
 El servidor corre en `http://localhost:3000`.

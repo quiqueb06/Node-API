@@ -51,6 +51,9 @@ let canciones = [
   },
 ];
 
+// Campos obligatorios
+const CAMPOS_OBLIGATORIOS = ["titulo", "artista", "genero", "duracion", "year"];
+
 // GET /api/canciones: Lista de canciones
 app.get("/api/canciones", (req, res) => {
   try {
@@ -80,6 +83,39 @@ app.get("/api/canciones/:id", (req, res) => {
     }
 
     res.status(200).json({ ok: true, data: cancion });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: "Error interno del servidor" });
+  }
+});
+
+// POST /api/canciones: Crear canción
+app.post("/api/canciones", (req, res) => {
+  try {
+    const body = req.body;
+
+    // Validar campos requeridos
+    const camposFaltantes = CAMPOS_OBLIGATORIOS.filter(
+      (campo) => body[campo] === undefined || body[campo] === ""
+    );
+
+    if (camposFaltantes.length > 0) {
+      return res.status(400).json({
+        ok: false,
+        error: `Faltan campos obligatorios: ${camposFaltantes.join(", ")}`,
+      });
+    }
+
+    const nuevaCancion = {
+      id: randomUUID(), // ID autogenerado
+      titulo: body.titulo,
+      artista: body.artista,
+      genero: body.genero,
+      duracion: body.duracion,
+      year: body.year,
+    };
+
+    canciones.push(nuevaCancion);
+    res.status(201).json({ ok: true, data: nuevaCancion });
   } catch (error) {
     res.status(500).json({ ok: false, error: "Error interno del servidor" });
   }

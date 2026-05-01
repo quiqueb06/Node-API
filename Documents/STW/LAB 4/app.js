@@ -54,6 +54,24 @@ let canciones = [
 // Campos obligatorios
 const CAMPOS_OBLIGATORIOS = ["titulo", "artista", "genero", "duracion", "year"];
 
+// GET /: Información de la API
+app.get("/", (req, res) => {
+  res.status(200).json({
+    ok: true,
+    data: {
+      mensaje: "Bienvenido a la API de Playlist Musical",
+      endpoints: [
+        { metodo: "GET", ruta: "/api/canciones", descripcion: "Obtener todas las canciones (acepta ?genero=)" },
+        { metodo: "GET", ruta: "/api/canciones/:id", descripcion: "Obtener una canción por ID" },
+        { metodo: "POST", ruta: "/api/canciones", descripcion: "Agregar una nueva canción" },
+        { metodo: "PUT", ruta: "/api/canciones/:id", descripcion: "Reemplazar una canción completa" },
+        { metodo: "PATCH", ruta: "/api/canciones/:id", descripcion: "Actualizar campos específicos de una canción" },
+        { metodo: "DELETE", ruta: "/api/canciones/:id", descripcion: "Eliminar una canción" },
+      ],
+    },
+  });
+});
+
 // GET /api/canciones: Lista de canciones
 app.get("/api/canciones", (req, res) => {
   try {

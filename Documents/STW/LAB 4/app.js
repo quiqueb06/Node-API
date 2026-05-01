@@ -121,6 +121,45 @@ app.post("/api/canciones", (req, res) => {
   }
 });
 
+// PUT /api/canciones/:id: Reemplazar canción
+app.put("/api/canciones/:id", (req, res) => {
+  try {
+    const index = canciones.findIndex((c) => c.id === req.params.id);
+
+    if (index === -1) {
+      return res.status(404).json({ ok: false, error: "Canción no encontrada" });
+    }
+
+    const body = req.body;
+
+    // Validar campos requeridos
+    const camposFaltantes = CAMPOS_OBLIGATORIOS.filter(
+      (campo) => body[campo] === undefined || body[campo] === ""
+    );
+
+    if (camposFaltantes.length > 0) {
+      return res.status(400).json({
+        ok: false,
+        error: `PUT requiere todos los campos. Faltan: ${camposFaltantes.join(", ")}`,
+      });
+    }
+
+    // Actualizar datos
+    canciones[index] = {
+      id: req.params.id,
+      titulo: body.titulo,
+      artista: body.artista,
+      genero: body.genero,
+      duracion: body.duracion,
+      year: body.year,
+    };
+
+    res.status(200).json({ ok: true, data: canciones[index] });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: "Error interno del servidor" });
+  }
+});
+
 // Iniciar servidor
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);

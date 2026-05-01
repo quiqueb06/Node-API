@@ -160,6 +160,33 @@ app.put("/api/canciones/:id", (req, res) => {
   }
 });
 
+// PATCH /api/canciones/:id: Actualizar campos específicos
+app.patch("/api/canciones/:id", (req, res) => {
+  try {
+    const index = canciones.findIndex((c) => c.id === req.params.id);
+
+    if (index === -1) {
+      return res.status(404).json({ ok: false, error: "Canción no encontrada" });
+    }
+
+    const body = req.body;
+
+    if (!body || Object.keys(body).length === 0) {
+      return res.status(400).json({
+        ok: false,
+        error: "Debes enviar al menos un campo para actualizar",
+      });
+    }
+
+    // Aplicar cambios
+    canciones[index] = { ...canciones[index], ...body, id: req.params.id };
+
+    res.status(200).json({ ok: true, data: canciones[index] });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: "Error interno del servidor" });
+  }
+});
+
 // Iniciar servidor
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);

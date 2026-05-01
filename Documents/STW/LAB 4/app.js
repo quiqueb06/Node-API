@@ -70,6 +70,21 @@ app.get("/api/canciones", (req, res) => {
   }
 });
 
+// GET /api/canciones/:id: Obtener canción por ID
+app.get("/api/canciones/:id", (req, res) => {
+  try {
+    const cancion = canciones.find((c) => c.id === req.params.id);
+
+    if (!cancion) {
+      return res.status(404).json({ ok: false, error: "Canción no encontrada" });
+    }
+
+    res.status(200).json({ ok: true, data: cancion });
+  } catch (error) {
+    res.status(500).json({ ok: false, error: "Error interno del servidor" });
+  }
+});
+
 // Iniciar servidor
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
